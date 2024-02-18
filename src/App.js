@@ -4,9 +4,9 @@ import HomePage from "./HomePage";
 
 export default function App() {
   return (
-    <div className="h-[100vh] gap-4">
+    <div>
       <Header />
-      <div style={{ marginTop: "36px" }}>
+      <div>
         {" "}
         {/* Add margin top to create space */}
         <HomePage />

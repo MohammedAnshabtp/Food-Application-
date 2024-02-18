@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchData, setActiveCategory, setActiveCategoryDishes } from "./fooddata";
-
+import styled from "styled-components";
 import { FaCartArrowDown } from "react-icons/fa";
-
-import { RootState } from "./store";
 import { fetchData, setActiveCategory, setActiveCategoryDishes } from "./fooddata";
 
 const Header = () => {
@@ -13,7 +10,6 @@ const Header = () => {
   const activeCategoryDishes = useSelector((state) => state.data.activeCategoryDishes) || [];
   const activeCategory = useSelector((state) => state.data.activeCategory);
   const cartCount = useSelector((state) => state.data.cartCount);
-  const [count, setCount] = useState(0); // State variable to hold the count value
 
   useEffect(() => {
     dispatch(fetchData());
@@ -22,54 +18,137 @@ const Header = () => {
   useEffect(() => {
     if (items?.data[0]?.table_menu_list && items.data[0].table_menu_list.length > 0) {
       const initialCategory = items.data[0].table_menu_list[0];
-      dispatch(setActiveCategory(initialCategory)); // Assuming setActiveCategory expects the whole category object
+      dispatch(setActiveCategory(initialCategory));
       dispatch(setActiveCategoryDishes(initialCategory.category_dishes));
     }
   }, [items, dispatch]);
 
   const handleCategoryClick = (category) => {
-    dispatch(setActiveCategory(category)); // Assuming setActiveCategory expects the whole category object
+    dispatch(setActiveCategory(category));
     dispatch(setActiveCategoryDishes(category.category_dishes));
   };
 
   return (
-    <>
-      <header className="sticky top-0 z-10 bg-black shadow-md flex justify-between font-extrabold text-[14px] w-[90%] m-auto py-7 phone:h-3 ">
-        <div>
-          <h1>Artisan Resto Cafe</h1>
-        </div>
-        <div className="flex gap-5">
-          <span>My Order</span>
-          <div className="text-xl relative">
+    <MainContainer>
+      <StyledHeader>
+        <BrandContainer>
+          <BrandTitle>Artisan Resto Cafe</BrandTitle>
+        </BrandContainer>
+        <OrdersCartContainer>
+          <span>My Orders</span>
+          <CartIconContainer>
             <FaCartArrowDown />
-            {cartCount > 0 && <span className="absolute -top-1 -right-2 bg-red-600 text-white rounded-full w-2 h-2 flex items-center justify-center">{cartCount}</span>}
-          </div>
-        </div>
-      </header>
-      <div className="w-full ">
-        <div className="sm:w-[100%] phone:py-0 phone:h-10 ">
-          <ul className="flex gap-5 py-5 w-[90%] m-auto phone:overflow-auto phone:mb-10">
-            {items?.data[0]?.table_menu_list?.map((item, index) => {
-              const isActive = item.menu_category_id === activeCategory?.menu_category_id;
-              return (
-                <li
-                  className={`phone:whitespace-nowrap relative cursor-pointer before:content-[''] before:w-[100%] before:h-1 before:absolute before:bottom-[-10px] ${
-                    isActive
-                      ? "text-red-600 before:bg-red-600" // Active category styles
-                      : "hover:text-red-600 before:bg-[#ffff] hover:before:bg-red-600" // Non-active category styles
-                  } ${isActive ? "" : "before:hidden hover:before:block"}`}
-                  key={index}
-                  onClick={() => handleCategoryClick(item)}
-                >
-                  {item.menu_category}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
-    </>
+            {cartCount > 0 && <StyledCartCount>{cartCount}</StyledCartCount>}
+          </CartIconContainer>
+        </OrdersCartContainer>
+      </StyledHeader>
+      <StyledMenuListContainer>
+        <ul className="menuList">
+          {items?.data[0]?.table_menu_list?.map((item, index) => {
+            const isActive = item.menu_category_id === activeCategory?.menu_category_id;
+            return (
+              <StyledMenuItem isActive={isActive} key={index} onClick={() => handleCategoryClick(item)}>
+                {item.menu_category}
+              </StyledMenuItem>
+            );
+          })}
+        </ul>
+      </StyledMenuListContainer>
+    </MainContainer>
   );
 };
 
 export default Header;
+export const MainContainer = styled.div`
+  background-color: black;
+`;
+const BrandContainer = styled.div`
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+`;
+
+const BrandTitle = styled.h1`
+  font-size: 2em;
+  color: white;
+  font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 1.5em;
+  }
+`;
+const StyledHeader = styled.header`
+  background-color: black;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 14px;
+  width: 90%;
+  margin: auto;
+  align-items: center;
+  padding: 10px;
+`;
+
+const CartIconContainer = styled.div`
+  font-size: 1.25rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+`;
+
+const StyledCartCount = styled.span`
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background-color: #ff4500;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+`;
+
+const OrdersCartContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 10px;
+  span {
+    color: white;
+  }
+`;
+
+const StyledMenuListContainer = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: black;
+
+  .menuList {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    list-style-type: none;
+  }
+`;
+
+const StyledMenuItem = styled.li`
+  padding: 10px 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.3s;
+  color: ${({ isActive }) => (isActive ? "#ff4500" : "white")};
+  border-bottom: ${({ isActive }) => (isActive ? "2px solid #ff4500" : "none")};
+  &:hover {
+    color: #ff4500;
+  }
+`;
