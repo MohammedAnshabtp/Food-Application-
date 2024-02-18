@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FaCartArrowDown } from "react-icons/fa";
-import { fetchData, setActiveCategory, setActiveCategoryDishes } from "./fooddata";
+import { fetchData, setActiveCategory, setActiveFoods } from "./fooddata";
 
 const Header = (props) => {
   const { count } = props;
@@ -19,13 +19,13 @@ const Header = (props) => {
     if (items?.data[0]?.table_menu_list && items.data[0].table_menu_list.length > 0) {
       const initialCategory = items.data[0].table_menu_list[0];
       dispatch(setActiveCategory(initialCategory));
-      dispatch(setActiveCategoryDishes(initialCategory.category_dishes));
+      dispatch(setActiveFoods(initialCategory.category_dishes));
     }
   }, [items, dispatch]);
 
   const handleCategoryClick = (category) => {
     dispatch(setActiveCategory(category));
-    dispatch(setActiveCategoryDishes(category.category_dishes));
+    dispatch(setActiveFoods(category.category_dishes));
   };
 
   return (

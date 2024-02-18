@@ -5,7 +5,7 @@ const initialState = {
   activeCategory: null,
   status: "idle",
   error: null,
-  activeCategoryDishes: null,
+  activeFoods: null,
   cartCount: 0,
 };
 
@@ -19,18 +19,18 @@ const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    setActiveCategoryDishes(state, action) {
-      state.activeCategoryDishes = action.payload;
+    setActiveFoods(state, action) {
+      state.activeFoods = action.payload;
     },
     setActiveCategory(state, action) {
       state.activeCategory = action.payload;
     },
     updateItemCount(state, action) {
       const { dish_id, count } = action.payload;
-      const dishToUpdate = state.activeCategoryDishes?.find((dish) => dish.dish_id === dish_id);
+      const dishToUpdate = state.activeFoods?.find((dish) => dish.dish_id === dish_id);
       if (dishToUpdate) {
         dishToUpdate.count = count;
-        state.cartCount = state.activeCategoryDishes.reduce((total, dish) => total + (dish.count || 0), 0);
+        state.cartCount = state.activeFoods.reduce((total, dish) => total + (dish.count || 0), 0);
       }
     },
   },
@@ -50,7 +50,7 @@ const dataSlice = createSlice({
   },
 });
 
-const { setActiveCategoryDishes, setActiveCategory, updateItemCount } = dataSlice.actions;
+const { setActiveFoods, setActiveCategory, updateItemCount } = dataSlice.actions;
 
-export { fetchData, setActiveCategoryDishes, setActiveCategory, updateItemCount };
+export { fetchData, setActiveFoods, setActiveCategory, updateItemCount };
 export default dataSlice.reducer;

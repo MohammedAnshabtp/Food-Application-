@@ -6,35 +6,35 @@ import Header from "./Header";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [dishCounts, setDishCounts] = useState({});
+  const [foodCount, setFoodCount] = useState({});
 
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
 
-  const activeCategoryDishes = useSelector((state) => state.data.activeCategoryDishes) || [];
+  const activeFoods = useSelector((state) => state.data.activeFoods) || [];
 
   const handleIncrement = (dish_id) => {
-    const newCount = (dishCounts[dish_id] || 0) + 1;
-    setDishCounts({ ...dishCounts, [dish_id]: newCount });
+    const newCount = (foodCount[dish_id] || 0) + 1;
+    setFoodCount({ ...foodCount, [dish_id]: newCount });
     dispatch(updateItemCount({ dish_id, count: newCount }));
   };
 
   const handleDecrement = (dish_id) => {
-    const currentCount = dishCounts[dish_id] || 0;
+    const currentCount = foodCount[dish_id] || 0;
     if (currentCount > 0) {
       const newCount = currentCount - 1;
-      setDishCounts({ ...dishCounts, [dish_id]: newCount });
+      setFoodCount({ ...foodCount, [dish_id]: newCount });
       dispatch(updateItemCount({ dish_id, count: newCount }));
     }
   };
 
-  const totalSum = Object.values(dishCounts).reduce((acc, currentValue) => acc + currentValue, 0);
+  const totalSum = Object.values(foodCount).reduce((acc, currentValue) => acc + currentValue, 0);
 
   return (
     <MainContainer>
       <Header count={totalSum} />
-      {activeCategoryDishes.map((dish) => (
+      {activeFoods.map((dish) => (
         <DishListWrapper key={dish.id}>
           <DishInfo>
             <DishFood>
@@ -55,7 +55,7 @@ const HomePage = () => {
             <DishDescription>{dish.dish_description}</DishDescription>
             <QuantityControl>
               <button onClick={() => handleDecrement(dish.dish_id)}>-</button>
-              <span className="count">{dishCounts[dish.dish_id] || 0}</span>
+              <span className="count">{foodCount[dish.dish_id] || 0}</span>
               <button onClick={() => handleIncrement(dish.dish_id)}>+</button>
             </QuantityControl>
             {dish.addonCat && dish.addonCat.length > 0 && <CustomizationIndicator>Customization Available</CustomizationIndicator>}
