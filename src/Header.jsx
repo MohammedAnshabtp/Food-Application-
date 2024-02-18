@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { FaCartArrowDown } from "react-icons/fa";
 import { fetchData, setActiveCategory, setActiveCategoryDishes } from "./fooddata";
 
-const Header = () => {
+const Header = (props) => {
+  const { count } = props;
   const dispatch = useDispatch();
   const items = useSelector((state) => state.data.items);
-  const activeCategoryDishes = useSelector((state) => state.data.activeCategoryDishes) || [];
   const activeCategory = useSelector((state) => state.data.activeCategory);
-  const cartCount = useSelector((state) => state.data.cartCount);
+  // const cartCount = useSelector((state) => state.data.cartCount);
 
   useEffect(() => {
     dispatch(fetchData());
@@ -38,7 +38,7 @@ const Header = () => {
           <span>My Orders</span>
           <CartIconContainer>
             <FaCartArrowDown />
-            {cartCount > 0 && <StyledCartCount>{cartCount}</StyledCartCount>}
+            {count > 0 && <StyledCartCount>{count}</StyledCartCount>}
           </CartIconContainer>
         </OrdersCartContainer>
       </StyledHeader>

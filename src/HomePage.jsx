@@ -2,18 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData, updateItemCount } from "./fooddata";
 import styled from "styled-components";
-
-const dish = {
-  dish_id: "123",
-  dish_name: "Example Dish",
-  dish_description: "A tasty dish",
-  dish_price: 10.99,
-  dish_image: "dish.jpg",
-  dish_currency: "USD",
-  dish_calories: 500,
-  dish_Type: 1,
-  addonCat: [],
-};
+import Header from "./Header";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -22,8 +11,6 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
-
-  const items = useSelector((state) => state.data.items);
 
   const activeCategoryDishes = useSelector((state) => state.data.activeCategoryDishes) || [];
 
@@ -42,8 +29,11 @@ const HomePage = () => {
     }
   };
 
+  const totalSum = Object.values(dishCounts).reduce((acc, currentValue) => acc + currentValue, 0);
+
   return (
     <MainContainer>
+      <Header count={totalSum} />
       {activeCategoryDishes.map((dish) => (
         <DishListWrapper key={dish.id}>
           <DishInfo>
@@ -82,10 +72,10 @@ const HomePage = () => {
 
 export default HomePage;
 
-export const MainContainer = styled.div`
+const MainContainer = styled.div`
   background-color: black;
 `;
-export const DishListWrapper = styled.div`
+const DishListWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 90%;
@@ -95,18 +85,16 @@ export const DishListWrapper = styled.div`
   position: relative;
 `;
 
-// Container for dish details
-export const DishInfo = styled.div`
+const DishInfo = styled.div`
   min-width: 50%;
 `;
-export const DishFood = styled.div`
+const DishFood = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
 `;
 
-// Container for the dish icon
-export const DishIconContainer = styled.div`
+const DishIconContainer = styled.div`
   width: 16px;
   img {
     width: 100%;
@@ -114,30 +102,25 @@ export const DishIconContainer = styled.div`
   }
 `;
 
-// Styled component for the dish name
-export const DishName = styled.span`
+const DishName = styled.span`
   font-size: 12px;
   white-space: nowrap;
   color: white;
 `;
 
-// Styled component for the dish price
-export const DishPrice = styled.p`
+const DishPrice = styled.p`
   font-size: 12px;
   margin-top: 2px;
 `;
 
-// Styled component for the dish description
-export const DishDescription = styled.small`
+const DishDescription = styled.small`
   color: #b2beb5;
   display: block;
   max-width: 50%;
   margin-top: 6px;
   font-size: 14px;
 `;
-
-// Styled component for quantity controls
-export const QuantityControl = styled.div`
+const QuantityControl = styled.div`
   display: flex;
   gap: 2px;
   background-color: #388e3c;
@@ -159,22 +142,17 @@ export const QuantityControl = styled.div`
   }
 `;
 
-// Styled component for customization indicator
-export const CustomizationIndicator = styled.span`
+const CustomizationIndicator = styled.span`
   color: #d32f2f;
   font-size: 0.875rem;
   white-space: nowrap;
 `;
-
-// Container for the dish image and calorie information
-export const DishImageContainer = styled.div`
+const DishImageContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
 `;
-
-// Styled component for calories information
-export const CaloriesInfo = styled.span`
+const CaloriesInfo = styled.span`
   font-size: 0.875rem;
   height: fit-content;
   width: 80px;
@@ -182,9 +160,7 @@ export const CaloriesInfo = styled.span`
   margin-right: 16px;
   color: white;
 `;
-
-// Styled component for the dish image
-export const StyledDishImage = styled.img`
+const StyledDishImage = styled.img`
   border-radius: 0.375rem;
   width: 100px;
   height: 100px;
